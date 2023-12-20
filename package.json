@@ -1,0 +1,27 @@
+{
+  "name": "ai-desktop-pets",
+  "version": "1.0.0",
+  "description": "An electon app for sharing desktop pets across devices",
+  "main": "src/main.js",
+  "scripts": {
+    "start": "electron .",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/djanidaud/ai-desktop-pets.git"
+  },
+  "author": "Dzhani Daud",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/djanidaud/ai-desktop-pets/issues"
+  },
+  "homepage": "https://github.com/djanidaud/ai-desktop-pets#readme",
+  "devDependencies": {
+    "electron": "^28.0.0"
+  },
+  "dependencies": {
+    "electron-reload": "^2.0.0-alpha.1",
+    "prettier": "^3.1.1"
+  }
+}

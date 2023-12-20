@@ -1,0 +1,18 @@
+body {
+    margin: 0;
+    padding: 0;
+}
+
+canvas {
+    transform-style: preserve-3d;
+}
+
+html {
+    overflow: hidden;
+
+    /*Fixes bug where 4 px non-html padding is introduced*/
+    position: fixed;
+    bottom: 4px;
+}
+
+
