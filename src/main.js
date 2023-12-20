@@ -22,10 +22,13 @@ const createWindow = () => {
         alwaysOnTop: true,
         minimizable: false,
         transparent: true,
+        resizable: false,
+        maxHeight: CANVAS_HEIGHT,
         roundedCorners: false,
         acceptFirstMouse: true,
         fullscreenable: false,
         hasShadow: false,
+        useContentSize: true,
         webPreferences: {
             preload: path.join(__dirname, 'preload.js'),
             nodeIntegration: true,
@@ -33,36 +36,13 @@ const createWindow = () => {
             enableRemoteModule: true,
         }
     })
-
     win.setAlwaysOnTop(true, 'screen-saver');
-    win.setVisibleOnAllWorkspaces(true)
-
-
-    setInterval(() => {
-        if (isBeingDragged)
-            return;
-
-        fallDown(win);
-    }, 10)
+    win.setVisibleOnAllWorkspaces(true);
 
     win.loadFile('src/index.html');
     // win.webContents.openDevTools({detach: true});
 }
 
-const fallDown = (window) => {
-    const primaryDisplay = screen.getPrimaryDisplay()
-    const height = primaryDisplay.size.height;
-
-    const x = window.getPosition()[0];
-    const y = window.getPosition()[1];
-
-    const hasReachedBottom = (y + CANVAS_HEIGHT) >= height;
-    if (hasReachedBottom) {
-        window.setPosition(x, height - CANVAS_HEIGHT);
-        return;
-    }
-    window.setPosition(x, y + 5);
-}
 
 
 app.whenReady().then(() => {
@@ -96,6 +76,7 @@ ipcMain.on('move-window', (event, x_hat, y_hat) => {
     if ((newX + CANVAS_WIDTH) > width) newX = width - CANVAS_WIDTH;
 
     window.setPosition(newX, newY);
+    window.setSize(CANVAS_WIDTH, CANVAS_HEIGHT);
 });
 
 ipcMain.on('mouseup', () => {

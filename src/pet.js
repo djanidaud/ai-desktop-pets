@@ -9,10 +9,16 @@ const ANIMATION_STATE = {
 }
 
 class DesktopPet {
+    FRAMERATE = 10;
 
-    constructor(canvas, imageSrc, spriteWidth, spriteHeight, animations) {
-        this.canvas = canvas;
-        this.context = canvas.getContext('2d');
+    constructor(document, canvasId, imageSrc, spriteWidth, spriteHeight, animations) {
+        this.frame = 0;
+
+        this.canvas = document.getElementById(canvasId);
+        this.canvas.width = CANVAS_WIDTH;
+        this.canvas.height = CANVAS_HEIGHT;
+        document.body.style.maxHeight = CANVAS_HEIGHT + "px";
+        this.context = this.canvas.getContext('2d');
 
         this.petImage = new Image();
         this.petImage.src = imageSrc;
@@ -24,6 +30,34 @@ class DesktopPet {
 
         this.spriteWidth = spriteWidth;
         this.spriteHeight = spriteHeight;
+        this.isDragging = false;
+
+        let offsetX, offsetY;
+        this.canvas.addEventListener('mousedown',  (event) => {
+            this.isDragging = true;
+            console.log(this.isDragging);
+
+            offsetX = event.clientX;
+            offsetY = event.clientY;
+
+            event.preventDefault();
+            ipcRenderer.send('mousedown');
+        });
+
+        document.addEventListener('mouseup', () => {
+            this.isDragging = false;
+            ipcRenderer.send('mouseup');
+        });
+
+        document.addEventListener('mousemove', (event) => {
+            console.log(this.isDragging);
+            if (this.isDragging) {
+                const x_hat = event.clientX - offsetX;
+                const y_hat = event.clientY - offsetY;
+
+                ipcRenderer.send('move-window', x_hat, y_hat);
+            }
+        });
     }
 
 
@@ -85,17 +119,25 @@ class DesktopPet {
     }
 
     animate() {
-        this.drawNextFrame();
+        if (this.frame % this.FRAMERATE === 0) {
+            if (this.isDragging) return;
 
-        if (this.hasAnimationFinished()) {
-            this.frameX = 0;
-            this.animationId = this.nextAnimation(this.animationId);
-        }
+            this.drawNextFrame();
 
-        // While running, walk around
-        if (this.animationId === ANIMATION_STATE.RUN) {
-            ipcRenderer.send('move-window', 5 * this.direction, 0);
+            if (this.hasAnimationFinished()) {
+                this.frameX = 0;
+                this.animationId = this.nextAnimation(this.animationId);
+            }
+
+
+            // While running, walk around
+            let walkX = 0;
+            if (this.animationId === ANIMATION_STATE.RUN) {
+                walkX = 5 * this.direction;
+            }
+            ipcRenderer.send('move-window', walkX, 10);
         }
+        this.frame++;
     }
 }
 
