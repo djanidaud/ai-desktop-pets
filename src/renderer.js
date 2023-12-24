@@ -28,7 +28,7 @@ const animations = {
     }
 }
 
-const desktopPet = new DesktopPet(document, "petCanvas", "../sprites/hedgehog.png", 32, 32, animations);
+const desktopPet = new DesktopPet(document, "petCanvas", "../sprites/hedgehog.png", 128, 128, animations);
 
 const animate = () => {
     desktopPet.animate();

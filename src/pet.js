@@ -12,7 +12,7 @@ const ANIMATION_STATE = {
 class DesktopPet {
     FRAMERATE = 10;
     SPEED = 5;
-    CAN_TALK = false;
+    CAN_TALK = true;
 
     constructor(document, canvasId, imageSrc, spriteWidth, spriteHeight, animations) {
         this.frame = 0;
