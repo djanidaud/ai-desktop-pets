@@ -21,9 +21,12 @@ const animations = {
         srcImageRowIndex: 3,
         frameLength: 7,
     },
+    [ANIMATION_STATE.TALK]: {
+        sequenceLength: 1,
+        srcImageRowIndex: 0,
+        frameLength: 150,
+    }
 }
-
-
 
 const desktopPet = new DesktopPet(document, "petCanvas", "../sprites/hedgehog.png", 32, 32, animations);
 
@@ -32,3 +35,4 @@ const animate = () => {
     requestAnimationFrame(animate);
 }
 animate();
+
